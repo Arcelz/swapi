@@ -75,6 +75,32 @@ func (c *Client) newRequest(s string) (*http.Request, error) {
 	return req, nil
 }
 
+// newRequest creates an API request.
+func (c *Client) newRequestWithParams(s string, params map[string]string) (*http.Request, error) {
+	rel, err := url.Parse(c.basePath + s)
+	if err != nil {
+		return nil, err
+	}
+
+	q := rel.Query()
+	q.Set("format", "json")
+	for k, v := range params {
+		q.Set(k, v)
+	}
+	rel.RawQuery = q.Encode()
+
+	u := c.baseURL.ResolveReference(rel)
+
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("User-Agent", c.userAgent)
+
+	return req, nil
+}
+
 // do sends an API request and returns the API response. The API response is
 // decoded and stored in the value pointed to by v, or returned as an error if
 // an API error has occurred.

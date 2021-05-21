@@ -35,3 +35,19 @@ func (c *Client) Planet(id int) (Planet, error) {
 
 	return planet, nil
 }
+
+// PlanetByName retrieves the planet with the given nane
+func (c *Client) PlanetByName(name string) (Planet, error) {
+	req, err := c.newRequest("planets/schema/")
+	if err != nil {
+		return Planet{}, err
+	}
+
+	var planet Planet
+
+	if _, err = c.do(req, &planet); err != nil {
+		return Planet{}, err
+	}
+
+	return planet, nil
+}
