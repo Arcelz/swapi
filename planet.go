@@ -47,7 +47,7 @@ func (c *Client) Planet(id int) (Planet, error) {
 func (c *Client) PlanetByName(name string) ([]Planet, error) {
 	m := make(map[string]string)
 	m["search"] = name
-	req, err := c.newRequestWithParams("planets/schema/", m)
+	req, err := c.newRequestWithParams("planets/", m)
 	if err != nil {
 		return nil, err
 	}
