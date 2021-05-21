@@ -6,7 +6,7 @@ type ListPlanet struct {
 	Count    int      `json:"count"`
 	Next     string   `json:"next"`
 	Previous string   `json:"previous"`
-	Result   []Planet `json:"result"`
+	Results  []Planet `json:"results"`
 }
 
 // A Planet is a large mass, planet or planetoid in the Star Wars Universe, at the time of 0 ABY.
@@ -58,5 +58,5 @@ func (c *Client) PlanetByName(name string) ([]Planet, error) {
 		return nil, err
 	}
 
-	return planetList.Result, nil
+	return planetList.Results, nil
 }
