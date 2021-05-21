@@ -2,6 +2,13 @@ package swapi
 
 import "fmt"
 
+type ListPlanet struct {
+	Count    int      `json:"count"`
+	Next     string   `json:"next"`
+	Previous string   `json:"previous"`
+	Result   []Planet `json:"result"`
+}
+
 // A Planet is a large mass, planet or planetoid in the Star Wars Universe, at the time of 0 ABY.
 type Planet struct {
 	Name           string   `json:"name"`
@@ -37,19 +44,19 @@ func (c *Client) Planet(id int) (Planet, error) {
 }
 
 // PlanetByName retrieves the planet with the given nane
-func (c *Client) PlanetByName(name string) (Planet, error) {
+func (c *Client) PlanetByName(name string) ([]Planet, error) {
 	m := make(map[string]string)
 	m["search"] = name
 	req, err := c.newRequestWithParams("planets/schema/", m)
 	if err != nil {
-		return Planet{}, err
+		return nil, err
 	}
 
-	var planet Planet
+	var planetList ListPlanet
 
-	if _, err = c.do(req, &planet); err != nil {
-		return Planet{}, err
+	if _, err = c.do(req, &planetList); err != nil {
+		return nil, err
 	}
 
-	return planet, nil
+	return planetList.Result, nil
 }
